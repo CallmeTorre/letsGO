@@ -1,32 +1,29 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/CallmeTorre/letsGO/mvc/services"
 	"github.com/CallmeTorre/letsGO/mvc/utils"
+	"github.com/gin-gonic/gin"
 )
 
-func GetUser(response http.ResponseWriter, request *http.Request) {
-	userID, err := (strconv.ParseInt(request.URL.Query().Get("user_id"), 10, 64))
+func GetUser(c *gin.Context) {
+	userID, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {
 		userError := utils.ApplicationError{
 			Message:    "user_id must be a number",
 			StatusCode: http.StatusBadRequest,
 			Code:       "bad_request",
 		}
-		jsonValue, _ := json.Marshal(userError)
-		response.WriteHeader(userError.StatusCode)
-		response.Write(jsonValue)
+		utils.RespondError(c, &userError)
+		return
 	}
 	user, apiError := services.UsersService.GetUser(userID)
 	if apiError != nil {
-		jsonValue, _ := json.Marshal(apiError)
-		response.WriteHeader(apiError.StatusCode)
-		response.Write(jsonValue)
+		utils.RespondError(c, apiError)
+		return
 	}
-	jsonValue, _ := json.Marshal(user)
-	response.Write(jsonValue)
+	utils.Respond(c, http.StatusOK, user)
 }

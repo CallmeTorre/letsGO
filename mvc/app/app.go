@@ -1,15 +1,19 @@
 package app
 
 import (
-	"net/http"
-
-	"github.com/CallmeTorre/letsGO/mvc/controllers"
+	"github.com/gin-gonic/gin"
 )
 
-func StartApp() {
-	http.HandleFunc("/users", controllers.GetUser)
+var router *gin.Engine
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+func init() {
+	router = gin.Default()
+	//router = gin.New() //Blank engine without middleware
+}
+
+func StartApp() {
+	mapUrls()
+	if err := router.Run(":8080"); err != nil {
 		panic(err)
 	}
 }
