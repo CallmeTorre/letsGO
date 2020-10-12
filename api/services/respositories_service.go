@@ -15,7 +15,7 @@ type reposService struct{}
 
 type reposServiceInterface interface {
 	CreateRepo(request repositories.CreateRepoRequest) (*repositories.CreateRepoResponse, errors.ApiError)
-	CreateRepos(request []repositories.CreateRepoRequest) (*repositories.CreateReposResponse, errors.ApiError)
+	CreateRepos(request []repositories.CreateRepoRequest) *repositories.CreateReposResponse
 }
 
 var (

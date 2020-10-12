@@ -21,5 +21,4 @@ func TestGetMockedContext(T *testing.T) {
 	assert.EqualValues(T, 1, len(c.Request.Header))
 	assert.EqualValues(T, "true", c.GetHeader("X-Mock"))
 	assert.EqualValues(T, "true", c.GetHeader("x-mock"))
-
 }
