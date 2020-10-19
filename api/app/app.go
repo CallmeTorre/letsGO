@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/CallmeTorre/letsGO/api/log"
+	"github.com/CallmeTorre/letsGO/api/log/option_b"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -11,16 +11,23 @@ var router *gin.Engine
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file", err, "status:fail")
+		option_b.Fatal(
+			"Error loading .env file",
+			err,
+			option_b.Field("status", "fail"))
 	}
 	router = gin.Default()
 	//router = gin.New() //Blank engine without middleware
 }
 
 func StartApp() {
-	log.Info("About to map URLS", "step:1", "status:pending")
+	option_b.Info(
+		"About to map URLS",
+		option_b.Field("status", "pending"))
 	mapUrls()
-	log.Info("URLS successfully mapped", "step:2", "status:success")
+	option_b.Info(
+		"URLS successfully mapped",
+		option_b.Field("status", "success"))
 	if err := router.Run(":8080"); err != nil {
 		panic(err)
 	}
