@@ -16,3 +16,5 @@
 
 #OSX
 .DS_Store
+
+**/.env/
