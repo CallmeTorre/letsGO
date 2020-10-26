@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 	"time"
@@ -36,11 +37,17 @@ func main() {
 
 	problems := parseLines(lines)
 
-	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
+	fmt.Println(problems)
+
+	shuffleProblems(&problems)
+
+	fmt.Println(problems)
+
+	/*timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 
 	finalResult := printProblems(problems, timer)
 
-	printResults(*finalResult, len(problems))
+	printResults(*finalResult, len(problems))*/
 }
 
 func openFile(csvFilename *string) *os.File {
@@ -71,16 +78,29 @@ func parseLines(lines [][]string) []problem {
 	return result
 }
 
+func shuffleProblems(problems *[]problem) {
+	var source rand.Source = rand.NewSource(time.Now().UnixNano())
+	var r *rand.Rand = rand.New(source)
+
+	for i := range *problems {
+		newIndex := r.Intn(len(*problems) - 1)
+		(*problems)[i], (*problems)[newIndex] = (*problems)[newIndex], (*problems)[i]
+	}
+
+}
+
 func printProblems(problems []problem, timer *time.Timer) *result {
 	finalResult := &result{correct: 0, wrong: 0}
 	for i, problem := range problems {
 		fmt.Printf("Problem #%d: %s = ", i+1, problem.question)
 		answerChannel := make(chan string)
+
 		go func() {
 			var answer string
 			fmt.Scanf("%s\n", &answer)
 			answerChannel <- answer
 		}()
+
 		select {
 		case <-timer.C:
 			fmt.Println()
