@@ -37,17 +37,13 @@ func main() {
 
 	problems := parseLines(lines)
 
-	fmt.Println(problems)
+	problems = shuffleProblems(problems)
 
-	shuffleProblems(&problems)
-
-	fmt.Println(problems)
-
-	/*timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
+	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 
 	finalResult := printProblems(problems, timer)
 
-	printResults(*finalResult, len(problems))*/
+	printResults(*finalResult, len(problems))
 }
 
 func openFile(csvFilename *string) *os.File {
@@ -78,15 +74,15 @@ func parseLines(lines [][]string) []problem {
 	return result
 }
 
-func shuffleProblems(problems *[]problem) {
+func shuffleProblems(problems []problem) []problem {
 	var source rand.Source = rand.NewSource(time.Now().UnixNano())
 	var r *rand.Rand = rand.New(source)
 
-	for i := range *problems {
-		newIndex := r.Intn(len(*problems) - 1)
-		(*problems)[i], (*problems)[newIndex] = (*problems)[newIndex], (*problems)[i]
+	for i := range problems {
+		newIndex := r.Intn(len(problems) - 1)
+		problems[i], problems[newIndex] = problems[newIndex], problems[i]
 	}
-
+	return problems
 }
 
 func printProblems(problems []problem, timer *time.Timer) *result {
