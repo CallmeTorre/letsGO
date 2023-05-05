@@ -3,6 +3,6 @@ module github.com/CallmeTorre/letsGO/mvc
 go 1.15
 
 require (
-	github.com/gin-gonic/gin v1.6.3
-	github.com/stretchr/testify v1.6.1
+	github.com/gin-gonic/gin v1.9.0
+	github.com/stretchr/testify v1.8.1
 )
